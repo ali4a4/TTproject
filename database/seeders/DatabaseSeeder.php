@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\ProductCategory;
 use App\Models\LatvianRegion;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        ProductCategory::create(['category' => 'Beauty']);
+        /*ProductCategory::create(['category' => 'Beauty']);
         ProductCategory::create(['category' => 'Books']);
         ProductCategory::create(['category' => 'Clothing']);
         ProductCategory::create(['category' => 'Electronics']);
@@ -72,6 +73,11 @@ class DatabaseSeeder extends Seeder
         LatvianRegion::create(['region' => 'Tukuma novads']);
         LatvianRegion::create(['region' => 'Valkas novads']);
         LatvianRegion::create(['region' => 'Valmieras novads']);
-        LatvianRegion::create(['region' => 'Ventspils novads']);
+        LatvianRegion::create(['region' => 'Ventspils novads']);*/
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('admpas123')
+        ]);
     }
 }
