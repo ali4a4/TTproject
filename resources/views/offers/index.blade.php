@@ -1,6 +1,6 @@
 <x-layout title="Marketplace">
     <x-slot name="title">Marketplace</x-slot>
-    <h1 class="mb-4">Marketplace</h1>
+    <h1 class="mb-4 text-center">Marketplace</h1>
     <div class="d-flex">
         <form action="{{ route('offer.index') }}" method="GET">
             <button type="submit" class="btn btn-primary" style="width: 308px;">Sort</button>

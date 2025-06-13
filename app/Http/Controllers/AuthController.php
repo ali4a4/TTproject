@@ -97,7 +97,7 @@ class AuthController extends Controller
             return redirect()->intended('offer');
         }
         activity()->causedBy(auth()->user())->log('login fail');
-        return back()->with('error', 'Invalid credentials');
+        return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
 
     public function logout(Request $request) {

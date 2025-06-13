@@ -24,6 +24,6 @@ class Offer extends Model
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
     public function latvian_region() {
-        return $this->belongsTo(LatvianCategory::class, 'latvian_region_id');
+        return $this->belongsTo(LatvianRegion::class, 'latvian_region_id');
     }
 }

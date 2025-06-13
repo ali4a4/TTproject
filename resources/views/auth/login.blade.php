@@ -1,6 +1,16 @@
 <x-layout title="Login">
+    <h1 class="mb-4 text-center">Login</h1>
     <form action="{{ route('login') }}" method="POST">
         @csrf
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
             <input type="email" name="email" class="form-control" required value="{{ old('email') }}">

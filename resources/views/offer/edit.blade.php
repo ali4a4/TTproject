@@ -1,6 +1,6 @@
 <x-layout title="Edit offer">
     <x-slot name="title">Edit offer</x-slot>
-    <h1 class="mb-4">Edit offer</h1>
+    <h1 class="mb-4 text-center">Edit offer</h1>
     <form method="POST" action="{{ route('offer.update', $offer) }}" enctype="multipart/form-data">
         @csrf
         @method ('PUT')

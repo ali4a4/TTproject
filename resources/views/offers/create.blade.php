@@ -1,6 +1,6 @@
 <x-layout title="Create offer">
     <x-slot name="title">Create new offer</x-slot>
-    <h1 class="mb-4">Create new offer</h1>
+    <h1 class="mb-4 text-center">Create new offer</h1>
     <form method="POST" action="{{ route('offer.store') }}" enctype="multipart/form-data">
         @csrf
         @if ($errors->any())
