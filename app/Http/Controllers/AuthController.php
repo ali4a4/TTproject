@@ -65,10 +65,12 @@ class AuthController extends Controller
     }
 
     public function showRegister() {
+        activity()->causedBy(auth()->user())->log('registration shown');
         return view('auth.register');
     }
 
     public function showLogin() {
+        activity()->causedBy(auth()->user())->log('login shown');
         return view('auth.login');
     }
 
@@ -80,6 +82,7 @@ class AuthController extends Controller
         ]);
         $user = User::create($validated);
         Auth::login($user);
+        activity()->causedBy(auth()->user())->log('user created');
         return redirect()->route('offer.index')->with('success', 'Auth created successfully!');
     }
 
@@ -90,8 +93,10 @@ class AuthController extends Controller
         ]);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            activity()->causedBy(auth()->user())->log('login success');
             return redirect()->intended('offer');
         }
+        activity()->causedBy(auth()->user())->log('login fail');
         return back()->with('error', 'Invalid credentials');
     }
 
@@ -99,6 +104,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        activity()->causedBy(auth()->user())->log('logout success');
         return redirect()->route('offer.index');
     }
 }

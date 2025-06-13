@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Offer;
 use App\Models\ProductCategory;
 use App\Models\LatvianRegion;
+use Spatie\Activitylog\Models\Activity;
 
 class OfferController extends Controller
 {
@@ -18,6 +19,7 @@ class OfferController extends Controller
     public function index(Request $request, Offer $offer)
     {
         $offers = Offer::all();
+        activity()->causedBy(auth()->user())->log('offers index shown');
         return view('offers.index', compact('offers'));
     }
 
@@ -26,9 +28,13 @@ class OfferController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->user()->cannot('create', App\Models\Offer::class)) abort(403, 'You are not authorized to create this offer');
+        if ($request->user()->cannot('create', App\Models\Offer::class)) {
+            activity()->causedBy(auth()->user())->log('403 failed to create offer');
+            abort(403, 'You are not authorized to create this offer');
+        }
         $categories = ProductCategory::all();
         $regions = LatvianRegion::all();
+        activity()->causedBy(auth()->user())->log('offer created');
         return view('offers.create', compact('categories', 'regions'));
     }
 
@@ -37,7 +43,10 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {   
-        if ($request->user()->cannot('create', App\Models\Offer::class)) abort(403, 'You are not authorized to store this offer');
+        if ($request->user()->cannot('create', App\Models\Offer::class)) {
+            activity()->causedBy(auth()->user())->log('403 failed to store offer');
+            abort(403, 'You are not authorized to store this offer');
+        }
         $validated = $request->validate([
             'name' => 'required',
             'price' => 'required|numeric|min:0',
@@ -59,6 +68,7 @@ class OfferController extends Controller
             'product_category_id' => $validated['product_category_id'],
             'latvian_region_id' => $validated['latvian_region_id']
         ]);
+        activity()->causedBy(auth()->user())->log('offer stored');
         return redirect()->route('offer.index')->with('success', 'Offer created successfully!');
     }
 
@@ -68,6 +78,7 @@ class OfferController extends Controller
     public function show(string $id)
     {
         $offer = Offer::findOrFail($id);
+        activity()->causedBy(auth()->user())->log('offer shown');
         return view('offer.show', compact('offer'));
     }
 
@@ -77,9 +88,13 @@ class OfferController extends Controller
     public function edit(Request $request, string $id)
     {
         $offer = Offer::findOrFail($id);
-        if ($request->user()->cannot('update', $offer)) abort(403, 'You are not authorized to edit this offer');
+        if ($request->user()->cannot('update', $offer)) {
+            activity()->causedBy(auth()->user())->log('403 failed to edit offer');
+            abort(403, 'You are not authorized to edit this offer');
+        }
         $categories = ProductCategory::all();
         $regions = LatvianRegion::all();
+        activity()->causedBy(auth()->user())->log('offer edited');
         return view('offer.edit', compact('offer', 'categories', 'regions'));
     }
 
@@ -98,11 +113,15 @@ class OfferController extends Controller
             'latvian_region_id' => 'required|exists:latvian_regions,id'
         ]);
         $offer = Offer::findOrFail($id);
-        if ($request->user()->cannot('update', $offer)) abort(403, 'You are not authorized to update this offer');
+        if ($request->user()->cannot('update', $offer)) {
+            activity()->causedBy(auth()->user())->log('403 failed to update offer');
+            abort(403, 'You are not authorized to update this offer');
+        }
         Storage::disk('public')->delete($offer->imagePath);
         $imagePathReal = $request->file('imagePath')->store('offers', 'public');
         $validated['imagePath'] = $imagePathReal;
         $offer->update($validated);
+        activity()->causedBy(auth()->user())->log('offer updated');
         return redirect()->route('offer.show', $offer->id)->with('success', 'Offer updated successfully!');
     }
 
@@ -111,9 +130,13 @@ class OfferController extends Controller
      */
     public function destroy(Request $request, Offer $offer)
     {
-        if ($request->user()->cannot('delete', $offer)) abort(403, 'You are not authorized to delete this offer');
+        if ($request->user()->cannot('delete', $offer)) {
+            activity()->causedBy(auth()->user())->log('403 failed to destroy offer');
+            abort(403, 'You are not authorized to delete this offer');
+        }
         Storage::disk('public')->delete($offer->imagePath);
         $offer->delete();
+        activity()->causedBy(auth()->user())->log('offer destroyed');
         return redirect()->route('offer.index')->with('success', 'Offer deleted successfully.');
     }
 
