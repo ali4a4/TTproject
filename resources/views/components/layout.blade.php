@@ -7,7 +7,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
-        <div id="google_translate_element"></div>
+        <div id="google_translate_element" class="bg-secondary"></div>
         <script type="text/javascript">
             function googleTranslateElementInit() {
                 new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
@@ -15,6 +15,6 @@
         </script>
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         <x-nav-bar></x-nav-bar>
-        <main class="container">{{ $slot }}</main>
+        <main class="container-fluid bg-light">{{ $slot }}</main>
     </body>
 </html>

@@ -18,9 +18,15 @@ class OfferController extends Controller
      */
     public function index(Request $request, Offer $offer)
     {
-        $offers = Offer::all();
+        $query = Offer::query();
+        if ($request->filled('product_category_id')) $query->where('product_category_id', $request->product_category_id);
+        if ($request->filled('latvian_region_id')) $query->where('latvian_region_id', $request->latvian_region_id);
+        $query->where('isHidden', 0)->where(function ($q) {$q->where('expiryDate', '>', now());});
+        $offers = $query->latest()->get();
+        $categories = ProductCategory::all();
+        $regions = LatvianRegion::all();
         activity()->causedBy(auth()->user())->log('offers index shown');
-        return view('offers.index', compact('offers'));
+        return view('offers.index', compact('offers', 'categories', 'regions'));
     }
 
     /**
